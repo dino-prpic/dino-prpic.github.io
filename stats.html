@@ -171,6 +171,24 @@
             }
     
         }
+
+
+        function dropDB() {
+            // delete all bins
+            ids.forEach(id => {
+                fetch('https://api.jsonbin.io/v3/b/' + id, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': '$2b$10$we0wxrWtQid0JZ4K9mybYOJOMBl2gaxnpMzm6zZUS1XoRW4PZi/r.',
+                        'X-Bin-Meta': 'false'
+                    }
+                }).then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                });
+            });
+        }
     
     
     </script>
