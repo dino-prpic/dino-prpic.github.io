@@ -353,7 +353,7 @@ var Hn=Object.defineProperty;var jn=(A,a,u)=>a in A?Hn(A,a,{enumerable:!0,config
           ?hidden=${!this.recentRecording}
           title="Open Recent Recording - ${(A=this.recentRecording)==null?void 0:A.name}"
           slot="header"
-          @click=${async()=>{if(!this.recentRecording||!await Gs(this.recentRecording))return;const u=await(await this.recentRecording.getFile()).text();this.recording.import(JSON.parse(u)),this.spectrogram.requestUpdate(),this.markings.requestUpdate(),this.position=0,this.savedState=!0,this.recordingElement.setAttribute("open",""),this.recentRecording=void 0}}
+          @click=${async()=>{if(!this.recentRecording||!await Gs(this.recentRecording))return;const u=await(await this.recentRecording.getFile()).text();this.recording.import(JSON.parse(u)),this.spectrogram.requestUpdate(),this.markings.requestUpdate(),this.position=0,this.savedState=!0,this.recordingElement.setAttribute("open",""),this.recordingFile=this.recentRecording,this.recentRecording=void 0}}
         >
           🕒
         </button>
