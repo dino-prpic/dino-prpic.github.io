@@ -33,12 +33,6 @@ var Hn=Object.defineProperty;var jn=(A,a,u)=>a in A?Hn(A,a,{enumerable:!0,config
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */function ye(A,a){return(u,_,R)=>{const ht=U=>{var o;return((o=U.renderRoot)==null?void 0:o.querySelector(A))??null};if(a){const{get:U,set:o}=typeof _=="object"?u:R??(()=>{const K=Symbol();return{get(){return this[K]},set(n){this[K]=n}}})();return Hs(u,_,{get(){let K=U.call(this);return K===void 0&&(K=ht(this),(K!==null||this.hasUpdated)&&o.call(this,K)),K}})}return Hs(u,_,{get(){return ht(this)}})}}var hr=Object.defineProperty,dr=Object.getOwnPropertyDescriptor,Cs=(A,a,u,_)=>{for(var R=_>1?void 0:_?dr(a,u):a,ht=A.length-1,U;ht>=0;ht--)(U=A[ht])&&(R=(_?U(a,u,R):U(R))||R);return _&&R&&hr(a,u,R),R};let si=class extends Ae{constructor(){super(...arguments),this.title="",this.description=""}render(){return be`
-      <!-- <details>
-        <summary>${this.title}</summary>
-        <p>${this.description}</p>
-        <slot></slot>
-      </details> -->
-
       <div class="header">
         <div class="info" @click=${()=>{this.getAttribute("open")!==null?this.removeAttribute("open"):this.setAttribute("open","")}}>
           <h3 class="title">${this.title}</h3>
@@ -58,16 +52,15 @@ var Hn=Object.defineProperty;var jn=(A,a,u)=>a in A?Hn(A,a,{enumerable:!0,config
       grid-template-rows: auto 0fr;
       grid-template-columns: 1fr;
       box-sizing: border-box;
-      padding: 1em;
-      gap: 0;
       border-top: 1px solid var(--theme-color-background-light);
-      transition: gap 0.2s, grid-template-rows 0.2s;
+      transition: grid-template-rows 0.2s;
     }
     
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 1em;
     }
     .info {
       font-size: .9em;
@@ -87,14 +80,17 @@ var Hn=Object.defineProperty;var jn=(A,a,u)=>a in A?Hn(A,a,{enumerable:!0,config
       opacity: 0;
       transition: opacity 0.5s;
       overflow: hidden;
+      padding: 0;
+      box-sizing: border-box;
+      transition: padding 0.5s;
     }
 
     :host([open]) {
       grid-template-rows: auto 1fr;
-      gap: 1em;
     }
     :host([open]) .content {
       opacity: 1;
+      padding: 0 1em 1em;
     }
 
   `;Cs([fe({type:String})],si.prototype,"title",2);Cs([fe({type:String})],si.prototype,"description",2);si=Cs([Te("collapsable-container")],si);const Ts=Se`
@@ -159,6 +155,9 @@ var Hn=Object.defineProperty;var jn=(A,a,u)=>a in A?Hn(A,a,{enumerable:!0,config
       padding: 0.5rem;
       outline: none;
     }
+    :host:focus {
+      background: var(--theme-color-background-light);
+    }
     :host:fullscreen {
       background: black;
     }
@@ -167,7 +166,7 @@ var Hn=Object.defineProperty;var jn=(A,a,u)=>a in A?Hn(A,a,{enumerable:!0,config
       max-width: 100%;
     }
     ::slotted(canvas[selected]) {
-      box-shadow: 0 0 0 5px var(--color-cyan);
+      box-shadow: 0 0 0 5px var(--theme-color-primary);
     }
   `;_s=Rr([Te("pdf-viewer")],_s);var Fr=Object.defineProperty,Dr=Object.getOwnPropertyDescriptor,oi=(A,a,u,_)=>{for(var R=_>1?void 0:_?Dr(a,u):a,ht=A.length-1,U;ht>=0;ht--)(U=A[ht])&&(R=(_?U(a,u,R):U(R))||R);return _&&R&&Fr(a,u,R),R};const js=localStorage.getItem("recognitionOptions"),li=js?JSON.parse(js):{minDistance:7,maxDistance:42,seekStep:2.6,treshold:100},ci={minDistance:"Shortest seek distance from current frame.",maxDistance:"Longest seek distance from current frame.",seekStep:"How many frames to add to seek distance when recognizer predicts the same frame as before.",treshold:"How different a frame from recording can be to be considered a match. 0 means identical, 255 means completely different."};let Re=class extends Ae{constructor(){super(...arguments),this.minDistance=li.minDistance,this.maxDistance=li.maxDistance,this.seekStep=li.seekStep,this.treshold=li.treshold}render(){return be`
       <div>
@@ -264,6 +263,17 @@ var Hn=Object.defineProperty;var jn=(A,a,u)=>a in A?Hn(A,a,{enumerable:!0,config
         cursor: pointer;
         user-select: none;
       }
+      .mark::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -20%) rotate(45deg);
+        width: .5rem;
+        height: .5rem;
+        background: var(--theme-color-background-light);
+        z-index: -1;
+      }
     `];$n([fe({type:Object})],ki.prototype,"recording",2);ki=$n([Te("markings-editor")],ki);const Lr=Se`
   input {
     background: var(--theme-color-background-light);
@@ -277,19 +287,23 @@ var Hn=Object.defineProperty;var jn=(A,a,u)=>a in A?Hn(A,a,{enumerable:!0,config
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    margin: .2em 0;
+    margin: .4em 0;
     border-radius: .2em;
+    cursor: pointer;
   }
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    width: .1em;
-    height: .1em;
-    scale: 8;
+    width: .2em;
+    height: .2em;
+    scale: 5;
     border-radius: .1em;
     background: var(--theme-color-primary);
-    cursor: pointer;
+  }
+  /* focused */
+  input[type="range"]:focus::-webkit-slider-thumb {
+    scale: 6;
   }
 
 `;class Nr{constructor(a){this.recording=a,this.position=0,this.searchDistance=1}getDifferences(a,u=0,_=this.recording.data.length){return new Uint8Array(this.recording.data.slice(u,_).map(R=>new Uint8Array(R.map((ht,U)=>Math.abs(ht-a[U]),0))).map(R=>Math.max(...R)))}guess(a,{treshold:u=100,minDistance:_=7,maxDistance:R=42,seekStep:ht=1.618}={}){if(this.position>=this.recording.data.length-this.searchDistance)return{over:!0};const U=this.getDifferences(a,this.position,this.position+Math.max(Math.round(this.searchDistance),_)),o=Math.min(...U),K=this.position+U.lastIndexOf(o);o>u||K===this.position?this.searchDistance=Math.min(this.searchDistance+ht,R):(this.searchDistance=1,this.position=K);const n=this.recording.markings.length?this.recording.markings.reduce((P,V)=>V[0]<=this.position?V:P)[1]:void 0;return{position:this.position,mark:n,differences:U}}}class $r{constructor(){this.data=[],this.markings=[]}clear(){this.data.length=0,this.markings.length=0}export(){return{data:this.data.map(u=>{const _=[];let R=u[0],ht=1;for(let U=1;U<u.length;U++)u[U]===R?ht++:(ht>1?_.push([R,ht]):_.push(R),R=u[U],ht=1);return ht>1?_.push([R,ht]):_.push(R),_}),markings:this.markings}}import({data:a,markings:u}){this.clear();for(const _ of a){const R=[];for(const ht of _)if(Array.isArray(ht)){const[U,o]=ht;R.push(...new Array(o).fill(U))}else R.push(ht);this.data.push(new Uint8Array(R))}this.markings=u}createFollower(){return new Nr(this)}}const ks=(()=>{if(typeof self>"u")return!1;if("top"in self&&self!==top)try{top.window.document._=0}catch{return!1}return"showOpenFilePicker"in self})(),Ur=ks?Promise.resolve().then(function(){return zr}):Promise.resolve().then(function(){return Kr});async function Ws(...A){return(await Ur).default(...A)}ks?Promise.resolve().then(function(){return Xr}):Promise.resolve().then(function(){return Qr});const Br=ks?Promise.resolve().then(function(){return qr}):Promise.resolve().then(function(){return ta});async function Hr(...A){return(await Br).default(...A)}const jr=async A=>{const a=await A.getFile();return a.handle=A,a};var Wr=async(A=[{}])=>{Array.isArray(A)||(A=[A]);const a=[];A.forEach((R,ht)=>{a[ht]={description:R.description||"Files",accept:{}},R.mimeTypes?R.mimeTypes.map(U=>{a[ht].accept[U]=R.extensions||[]}):a[ht].accept["*/*"]=R.extensions||[]});const u=await window.showOpenFilePicker({id:A[0].id,startIn:A[0].startIn,types:a,multiple:A[0].multiple||!1,excludeAcceptAllOption:A[0].excludeAcceptAllOption||!1}),_=await Promise.all(u.map(jr));return A[0].multiple?_:_[0]},zr={__proto__:null,default:Wr};function Ci(A){function a(u){if(Object(u)!==u)return Promise.reject(new TypeError(u+" is not an object."));var _=u.done;return Promise.resolve(u.value).then(function(R){return{value:R,done:_}})}return Ci=function(u){this.s=u,this.n=u.next},Ci.prototype={s:null,n:null,next:function(){return a(this.n.apply(this.s,arguments))},return:function(u){var _=this.s.return;return _===void 0?Promise.resolve({value:u,done:!0}):a(_.apply(this.s,arguments))},throw:function(u){var _=this.s.return;return _===void 0?Promise.reject(u):a(_.apply(this.s,arguments))}},new Ci(A)}const Un=async(A,a,u=A.name,_)=>{const R=[],ht=[];var U,o=!1,K=!1;try{for(var n,P=function(V){var q,gt,z,F=2;for(typeof Symbol<"u"&&(gt=Symbol.asyncIterator,z=Symbol.iterator);F--;){if(gt&&(q=V[gt])!=null)return q.call(V);if(z&&(q=V[z])!=null)return new Ci(q.call(V));gt="@@asyncIterator",z="@@iterator"}throw new TypeError("Object is not async iterable")}(A.values());o=!(n=await P.next()).done;o=!1){const V=n.value,q=`${u}/${V.name}`;V.kind==="file"?ht.push(V.getFile().then(gt=>(gt.directoryHandle=A,gt.handle=V,Object.defineProperty(gt,"webkitRelativePath",{configurable:!0,enumerable:!0,get:()=>q})))):V.kind!=="directory"||!a||_&&_(V)||R.push(Un(V,a,q,_))}}catch(V){K=!0,U=V}finally{try{o&&P.return!=null&&await P.return()}finally{if(K)throw U}}return[...(await Promise.all(R)).flat(),...await Promise.all(ht)]};var Gr=async(A={})=>{A.recursive=A.recursive||!1,A.mode=A.mode||"read";const a=await window.showDirectoryPicker({id:A.id,startIn:A.startIn,mode:A.mode});return(await(await a.values()).next()).done?[a]:Un(a,A.recursive,void 0,A.skipDirectory)},Xr={__proto__:null,default:Gr},Vr=async(A,a=[{}],u=null,_=!1,R=null)=>{Array.isArray(a)||(a=[a]),a[0].fileName=a[0].fileName||"Untitled";const ht=[];let U=null;if(A instanceof Blob&&A.type?U=A.type:A.headers&&A.headers.get("content-type")&&(U=A.headers.get("content-type")),a.forEach((n,P)=>{ht[P]={description:n.description||"Files",accept:{}},n.mimeTypes?(P===0&&U&&n.mimeTypes.push(U),n.mimeTypes.map(V=>{ht[P].accept[V]=n.extensions||[]})):U?ht[P].accept[U]=n.extensions||[]:ht[P].accept["*/*"]=n.extensions||[]}),u)try{await u.getFile()}catch(n){if(u=null,_)throw n}const o=u||await window.showSaveFilePicker({suggestedName:a[0].fileName,id:a[0].id,startIn:a[0].startIn,types:ht,excludeAcceptAllOption:a[0].excludeAcceptAllOption||!1});!u&&R&&R(o);const K=await o.createWritable();return"stream"in A?(await A.stream().pipeTo(K),o):"body"in A?(await A.body.pipeTo(K),o):(await K.write(await A),await K.close(),o)},qr={__proto__:null,default:Vr},Yr=async(A=[{}])=>(Array.isArray(A)||(A=[A]),new Promise((a,u)=>{const _=document.createElement("input");_.type="file";const R=[...A.map(K=>K.mimeTypes||[]),...A.map(K=>K.extensions||[])].join();_.multiple=A[0].multiple||!1,_.accept=R||"",_.style.display="none",document.body.append(_);const ht=K=>{typeof U=="function"&&U(),a(K)},U=A[0].legacySetup&&A[0].legacySetup(ht,()=>U(u),_),o=()=>{window.removeEventListener("focus",o),_.remove()};_.addEventListener("click",()=>{window.addEventListener("focus",o)}),_.addEventListener("change",()=>{window.removeEventListener("focus",o),_.remove(),ht(_.multiple?Array.from(_.files):_.files[0])}),"showPicker"in HTMLInputElement.prototype?_.showPicker():_.click()})),Kr={__proto__:null,default:Yr},Jr=async(A=[{}])=>(Array.isArray(A)||(A=[A]),A[0].recursive=A[0].recursive||!1,new Promise((a,u)=>{const _=document.createElement("input");_.type="file",_.webkitdirectory=!0;const R=U=>{typeof ht=="function"&&ht(),a(U)},ht=A[0].legacySetup&&A[0].legacySetup(R,()=>ht(u),_);_.addEventListener("change",()=>{let U=Array.from(_.files);A[0].recursive?A[0].recursive&&A[0].skipDirectory&&(U=U.filter(o=>o.webkitRelativePath.split("/").every(K=>!A[0].skipDirectory({name:K,kind:"directory"})))):U=U.filter(o=>o.webkitRelativePath.split("/").length===2),R(U)}),"showPicker"in HTMLInputElement.prototype?_.showPicker():_.click()})),Qr={__proto__:null,default:Jr},Zr=async(A,a={})=>{Array.isArray(a)&&(a=a[0]);const u=document.createElement("a");let _=A;"body"in A&&(_=await async function(U,o){const K=U.getReader(),n=new ReadableStream({start:q=>async function gt(){return K.read().then(({done:z,value:F})=>{if(!z)return q.enqueue(F),gt();q.close()})}()}),P=new Response(n),V=await P.blob();return K.releaseLock(),new Blob([V],{type:o})}(A.body,A.headers.get("content-type"))),u.download=a.fileName||"Untitled",u.href=URL.createObjectURL(await _);const R=()=>{typeof ht=="function"&&ht()},ht=a.legacySetup&&a.legacySetup(R,()=>ht(),u);return u.addEventListener("click",()=>{setTimeout(()=>URL.revokeObjectURL(u.href),3e4),R()}),u.click(),null},ta={__proto__:null,default:Zr};function Ms(A){return new Promise((a,u)=>{A.oncomplete=A.onsuccess=()=>a(A.result),A.onabort=A.onerror=()=>u(A.error)})}function ea(A,a){const u=indexedDB.open(A);u.onupgradeneeded=()=>u.result.createObjectStore(a);const _=Ms(u);return(R,ht)=>_.then(U=>ht(U.transaction(a,R).objectStore(a)))}let Ui;function Bn(){return Ui||(Ui=ea("keyval-store","keyval")),Ui}function zs(A,a=Bn()){return a("readonly",u=>Ms(u.get(A)))}function Bi(A,a,u=Bn()){return u("readwrite",_=>(_.put(a,A),Ms(_.transaction)))}var ia=Object.defineProperty,sa=Object.getOwnPropertyDescriptor,ue=(A,a,u,_)=>{for(var R=_>1?void 0:_?sa(a,u):a,ht=A.length-1,U;ht>=0;ht--)(U=A[ht])&&(R=(_?U(a,u,R):U(R))||R);return _&&R&&ia(a,u,R),R};let he=class extends Ae{constructor(){super(...arguments),this.recording=new $r,this.follower=this.recording.createFollower(),this.savedState=!0,this.recentAvailable=!1}render(){return[this.renderHeader(),this.renderViewer(),this.renderRecording(),this.renderPageTurner()]}set position(A){this.follower.position=A,this.positionSlider.max=this.recording.data.length.toString(),this.positionSlider.value=A.toString(),this.markings.position=A;const a=this.scrollable.scrollWidth-this.scrollable.clientWidth,u=A/this.recording.data.length;this.scrollable.scrollTo({left:u*a,behavior:"auto"})}get position(){return parseInt(this.positionSlider.value)}connectedCallback(){super.connectedCallback(),this.loadRecent()}async loadRecent(){this.recentPDF=await zs("pdf"),this.recentRecording=await zs("recording")}renderHeader(){var A;return be`
@@ -299,14 +313,7 @@ var Hn=Object.defineProperty;var jn=(A,a,u)=>a in A?Hn(A,a,{enumerable:!0,config
           title="Open PDF"
           @click=${async()=>{const a=await Ws({mimeTypes:["application/pdf"]}),u=await a.arrayBuffer();this.viewer.load(u),a.handle&&Bi("pdf",a.handle)}}
         >
-          📄
-        </button>
-
-        <button
-          title="Fullscreen"
-          @click=${()=>{this.viewer.requestFullscreen(),this.viewer.focus()}}
-        >
-          ↗️
+          📄 Sheet
         </button>
 
         <button
@@ -315,6 +322,13 @@ var Hn=Object.defineProperty;var jn=(A,a,u)=>a in A?Hn(A,a,{enumerable:!0,config
           @click=${async()=>{if(!this.recentPDF||!await Gs(this.recentPDF))return;const u=await(await this.recentPDF.getFile()).arrayBuffer();await this.viewer.load(u),this.recentPDF=void 0}}
         >
           🕒
+        </button>
+
+        <button
+          title="Fullscreen"
+          @click=${()=>{this.viewer.requestFullscreen(),this.viewer.focus()}}
+        >
+          ↗️
         </button>
 
       </header>
